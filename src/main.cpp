@@ -56,7 +56,7 @@ void loop()
   if (recording)
   {
     for (int i = 0; i < NUM_LEDS; i++)
-      leds[i].setHSV(0, sat, hue);
+      leds[i].setHSV(0, sat, sin8(hue * 1.5));
   }
   else
   {
