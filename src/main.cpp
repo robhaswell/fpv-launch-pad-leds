@@ -14,7 +14,7 @@ CRGB leds[NUM_LEDS];
 // The starting hue of the LED string
 uint8_t hue = 0;
 uint8_t sat = 255;
-uint8_t val = 100;
+uint8_t val = 255;
 
 // The hue increment for each LED
 uint8_t hueStep = 255 / NUM_LEDS;
@@ -60,18 +60,18 @@ void loop()
   }
   else
   {
-    for (int i = 0; i < NUM_LEDS; i++)
+    for (int i = 0; i < NUM_LEDS / 2; i++)
     {
-      uint8_t ledHue = hue + abs8((15 - i) * hueStep);
-      // uint8_t ba = hue + (i * hueStep);
+      uint8_t ledHue = hue + i * hueStep;
       leds[i].setHSV(ledHue, sat, val);
     }
-    FastLED.show();
 
-    // Increment the hue to give the rotating effect
+    // Mirror the LEDs to the other side
+    for (int i = 0; i < NUM_LEDS / 2; i++)
+      leds[NUM_LEDS - i - 1].setRGB(leds[i].r, leds[i].g, leds[i].b);
   }
-  hue += SPEED;
   FastLED.show();
+  hue += SPEED;
 
   delay(DELAY);
 }
