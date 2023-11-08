@@ -34,17 +34,17 @@ void setup()
   FastLED.addLeds<WS2812B, LED_PIN, GRB>(leds, NUM_LEDS)
     .setCorrection(TypicalLEDStrip);
   FastLED.clear();
+  FastLED.show();
 
+  // Initialise serial connection to the ELRS backpack
   Serial2.setTX(8);
   Serial2.setRX(9);
   Serial2.begin(115200);
-
-  leds[0] = CRGB::Blue;
-  FastLED.show();
 }
 
 void loop()
 {
+  // Check for incoming MSP packets
   if (Serial2.available())
   {
     uint8_t c = Serial2.read();
@@ -57,14 +57,17 @@ void loop()
     }
   }
 
+  // Update the LEDs
   if (recording)
   {
+    // If we're recording, flash the LEDs red
     speed = 6;
     for (int i = 0; i < NUM_LEDS; i++)
       leds[i].setHSV(0, sat, sin8(hue * 1.5));
   }
   else
   {
+    // Otherwise, cycle the LEDs through the colour spectrum
     speed = SPEED;
     for (int i = 0; i < NUM_LEDS / 2; i++)
     {
